@@ -68,6 +68,8 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'role.admin' => \App\Http\Middleware\CheckRoleAdmin::class,
         'role.user' => \App\Http\Middleware\CheckRoleUser::class,
+        'role.spri' => \App\Http\Middleware\CheckSpri::class,
+        'role.karumkit' => \App\Http\Middleware\CheckKarumkit::class,
         'redirectIfAuthenticated' => \App\Http\Middleware\RedirectIfAuthenticated::class,
     ];
 }

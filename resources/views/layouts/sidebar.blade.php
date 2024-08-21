@@ -53,23 +53,68 @@
             </li>
 
             @if (auth()->user()->role->name == 'admin')
-                {{-- <li class="sidebar-item has-sub {{ Request::is('admin.addusers.index*') ? 'active' : '' }}">
+                <li class="sidebar-item has-sub {{ Request::is('disposisi*') ? 'active' : '' }}">
                     <a href="#" class='sidebar-link'>
-                        <i class="bi bi-card-checklist"></i>
-                        <span>Pegawai</span>
+                        <i class="bi bi-paperclip"></i>
+                        <span>Lembar Disposisi</span>
                     </a>
 
                     <ul class="submenu">
-                        <li class="submenu-item {{ Request::routeIs('admin.addusers.index') ? 'active' : '' }}">
-                            <a href="{{ route('admin.addusers.index') }}" class="submenu-link">Daftar Pegawai</a>
+                        <li class="submenu-item {{ Request::routeIs('disposisi.index') ? 'active' : '' }}">
+                            <a href="{{ route('disposisi.index') }}" class="submenu-link">Daftar Lembar Disposisi</a>
                         </li>
-                        <li class="submenu-item {{ Request::routeIs('admin.addusers.create') ? 'active' : '' }}">
-                            <a href="{{ route('admin.addusers.create') }}" class="submenu-link">Tambah Pegawai</a>
+                        <li class="submenu-item {{ Request::routeIs('disposisi.create') ? 'active' : '' }}">
+                            <a href="{{ route('disposisi.create') }}" class="submenu-link">Tambah Lembar Disposisi</a>
                         </li>
                     </ul>
-                </li> --}}
+                </li>
+
+                <li class="sidebar-item has-sub {{ Request::is('add-users*') ? 'active' : '' }}">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-people"></i>
+                        <span>Pengguna</span>
+                    </a>
+
+                    <ul class="submenu">
+                        <li class="submenu-item {{ Request::routeIs('add-users.index') ? 'active' : '' }}">
+                            <a href="{{ route('add-users.index') }}" class="submenu-link">Daftar Pengguna</a>
+                        </li>
+                        <li class="submenu-item {{ Request::routeIs('add-users.create') ? 'active' : '' }}">
+                            <a href="{{ route('add-users.create') }}" class="submenu-link">Tambah Pengguna</a>
+                        </li>
+                    </ul>
+                </li>
             @endif
 
+            @if (auth()->user()->role->name == 'spri')
+                <li class="sidebar-item has-sub {{ Request::is('lembar-disposisi*') ? 'active' : '' }}">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-paperclip"></i>
+                        <span>Lembar Disposisi</span>
+                    </a>
+
+                    <ul class="submenu">
+                        <li class="submenu-item {{ Request::routeIs('lembar-disposisi.index') ? 'active' : '' }}">
+                            <a href="{{ route('lembar-disposisi.index') }}" class="submenu-link">Daftar Lembar Disposisi</a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
+
+            @if (auth()->user()->role->name == 'karumkit')
+                <li class="sidebar-item has-sub {{ Request::is('lembar-disposisi-karumkit*') ? 'active' : '' }}">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-paperclip"></i>
+                        <span>Lembar Disposisi</span>
+                    </a>
+
+                    <ul class="submenu">
+                        <li class="submenu-item {{ Request::routeIs('lembar-disposisi-karumkit.index') ? 'active' : '' }}">
+                            <a href="{{ route('lembar-disposisi-karumkit.index') }}" class="submenu-link">Daftar Lembar Disposisi</a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
 
             <li class="sidebar-item">
                 <a href="{{ route('logout') }}" class='sidebar-link'

@@ -43,6 +43,10 @@ class LoginController extends Controller
         switch ($user->role->name) {
             case 'admin':
                 return redirect()->route('admin.dashboard');
+            case 'spri':
+                return redirect()->route('spri.dashboard');
+            case 'karumkit':
+                return redirect()->route('karumkit.dashboard');
             default:
                 return redirect()->route('home');
         }
