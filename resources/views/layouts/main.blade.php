@@ -40,9 +40,11 @@
                         <div class="d-flex align-items-center">
                             <a href="#" class="burger-btn d-block d-xl-none">
                                 <i class="bi fs-3"></i>
-                                <h5 class="card-title m-0">Disposisi Bhayangkara</h5>
+                                <h5 class="card-title m-0">Sistem Monitoring Surat Masuk Rumah Sakit Bhayangkara
+                                    Makassar</h5>
                             </a>
-                            <h5 class="card-title d-none d-xl-block m-0">Disposisi Bhayangkara</h5>
+                            <h5 class="card-title d-none d-xl-block m-0">Sistem Monitoring Surat Masuk Rumah Sakit Bhayangkara
+                                Makassar</h5>
                         </div>
                         <div class="d-flex align-items-center justify-content-between">
                             {{-- Notification --}}
@@ -110,11 +112,6 @@
 
                                 <!-- Dropdown Menu -->
                                 <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="profileDropdown">
-                                    <li><a class="dropdown-item" href="#">Profile</a></li>
-                                    <li><a class="dropdown-item" href="#">Settings</a></li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
                                     <li><a href="{{ route('logout') }}" class='dropdown-item'
                                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                             <i class="bi bi-box-arrow-right"></i>

@@ -25,6 +25,7 @@ class Disposisi extends Model
         'created_by',
         'updated_by',
         'user_id',
+        'is_user',
         'keterangan',
     ];
 

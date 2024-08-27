@@ -6,6 +6,7 @@ use App\Http\Controllers\admin\manajamen\DisposisiController;
 use App\Http\Controllers\admin\manajemen\AddUsersController;
 use App\Http\Controllers\admin\manajemen\LembarDisposisiKarumkitController;
 use App\Http\Controllers\admin\manajemen\LembarDisposisiSpriController;
+use App\Http\Controllers\admin\manajemen\LembarDisposisiUserController;
 use App\Http\Controllers\admin\manajemen\NotificationController;
 use App\Http\Controllers\admin\SpriController;
 use App\Http\Controllers\user\UserController;
@@ -60,4 +61,7 @@ Route::middleware(['auth', 'role.karumkit'])->group(function () {
 
 Route::middleware(['auth', 'role.user'])->group(function () {
     Route::get('/home', [UserController::class, 'index'])->name('home');
+
+    // manajemen
+    Route::resource('lembar-disposisi-user', LembarDisposisiUserController::class);
 });

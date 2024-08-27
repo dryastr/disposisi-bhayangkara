@@ -1,7 +1,7 @@
 <div class="table-responsive">
-    <table class="table table-xl">
-        <thead>
-            <tr>
+    <table class="table table-xl" style="padding-top: 30px">
+        <thead >
+            <tr >
                 <th>No</th>
                 <th>Nama Pengguna</th>
                 <th>Email</th>
@@ -28,6 +28,8 @@
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-{{ $user->id }}">
                                 <li><a class="dropdown-item" href="{{ route('add-users.edit', $user->id) }}">Ubah</a>
                                 </li>
+                                <li><a class="dropdown-item" href="{{ route('add-users.show', $user->id) }}">Lihat
+                                        Detail</a></li>
                                 <li>
                                     <form action="{{ route('add-users.destroy', $user->id) }}" method="POST"
                                         onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?')">

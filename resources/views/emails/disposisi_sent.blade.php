@@ -292,8 +292,12 @@
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="main">
                         <tr>
                             <td class="wrapper">
-                                <p>Lembar disposisi sudah mencapai tahap akhir dan telah diterima oleh
-                                    {{ $karumkit->name }}.</p>
+                                <p>Lembar disposisi sudah mencapai tahap akhir dan telah diterima oleh:</p>
+                                <ul>
+                                    @foreach ($karumkit as $user)
+                                        <li>{{ $user->name }}</li>
+                                    @endforeach
+                                </ul>
                                 <ul>
                                     <li><strong>No Surat:</strong> {{ $disposisi->no_surat }}</li>
                                     <li><strong>Perihal Surat:</strong> {{ $disposisi->perihal_surat }}</li>

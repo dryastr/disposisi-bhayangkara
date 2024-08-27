@@ -2,15 +2,6 @@
 
 @section('title', 'Detail Disposisi')
 
-@push('header-styles')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
-    <style>
-        .chosen-container .chosen-results {
-            z-index: 1051;
-        }
-    </style>
-@endpush
-
 @section('content')
     <div class="col-md-12 col-12">
         <div class="card">
@@ -22,16 +13,8 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Penerima Surat:</label>
-                                <p>{{ $disposisi->users->pluck('name')->join(', ') ?? 'Tidak ada penerima' }}</p>
-                            </div>
-                            <div class="form-group">
                                 <label>Nama Surat:</label>
                                 <p>{{ $disposisi->file_name_surat }}</p>
-                            </div>
-                            <div class="form-group">
-                                <label>No Surat:</label>
-                                <p>{{ $disposisi->no_surat }}</p>
                             </div>
                             <div class="form-group">
                                 <label>No Surat:</label>
@@ -53,19 +36,9 @@
                                 <label>Tanggal Surat Diterima:</label>
                                 <p>{{ $disposisi->tanggal_surat_diterima }}</p>
                             </div>
-                            <div class="form-group">
-                                <label>Status:</label>
-                                <p>{{ ucfirst($disposisi->status) }}</p>
-                            </div>
-                            <div class="form-group">
-                                <label>Keterangan:</label>
-                                <p>{{ $disposisi->keterangan ?? 'Tidak ada keterangan' }}</p>
-                            </div>
                             <div class="d-flex justify-content-start mt-3">
-                                <a href="{{ route('lembar-disposisi-karumkit.index') }}"
+                                <a href="{{ route('lembar-disposisi-user.index') }}"
                                     class="btn btn-secondary me-1 mb-1">Kembali</a>
-                                <button type="button" class="btn btn-primary me-1 mb-1" data-bs-toggle="modal"
-                                    data-bs-target="#kirimModal">Kirim ke Penerima Disposisi</button>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -87,49 +60,10 @@
             </div>
         </div>
     </div>
-
-    <!-- Modal Kirim -->
-    <div class="modal fade" id="kirimModal" tabindex="-1" aria-labelledby="kirimModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="kirimModalLabel">Kirim ke Penerima Disposisi</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('lembar-disposisi-karumkit.kirim', $disposisi->id) }}" method="POST">
-                        @csrf
-                        <div class="form-group">
-                            <label for="karumkit_id">Pilih Penerima:</label>
-                            <select class="form-control chosen-select" id="karumkit_id" name="karumkit_id[]"
-                                multiple="multiple" required>
-                                @foreach ($karumkit as $user)
-                                    <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-success">Simpan</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 
 @push('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('.chosen-select').chosen({
-                placeholder_text_multiple: 'Pilih Penerima',
-                width: '100%'
-            });
-        });
-
         document.getElementById('fullscreen-button').addEventListener('click', function() {
             var iframe = document.getElementById('surat-iframe');
             if (iframe.requestFullscreen) {

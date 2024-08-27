@@ -116,6 +116,21 @@
                 </li>
             @endif
 
+            @if (auth()->user()->role->name == 'user')
+                <li class="sidebar-item has-sub {{ Request::is('lembar-disposisi-user*') ? 'active' : '' }}">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-paperclip"></i>
+                        <span>Lembar Disposisi</span>
+                    </a>
+
+                    <ul class="submenu">
+                        <li class="submenu-item {{ Request::routeIs('lembar-disposisi-user.index') ? 'active' : '' }}">
+                            <a href="{{ route('lembar-disposisi-user.index') }}" class="submenu-link">Daftar Lembar Disposisi</a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
+
             <li class="sidebar-item">
                 <a href="{{ route('logout') }}" class='sidebar-link'
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

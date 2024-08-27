@@ -4,37 +4,182 @@
 
 @section('content')
     <div class="row">
-        <div class="col-12">
+        <div class="col-12 mb-4">
+            <div class="card-body mb-4">
+                <p class="card-text">Hi, Selamat Datang <strong>{{ Auth::user()->name }}</strong>!</p>
+            </div>
             <div class="card">
                 <div class="card-header">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <h4 class="card-title">Daftar Pengguna</h4>
-                    </div>
+                    <h5 class="card-title">Jam</h5>
                 </div>
-                <div class="card-content">
-                    <div class="card-body">
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="active" role="tabpanel"
-                                aria-labelledby="active-tab">
-                                <div class="table-responsive">
-                                    <table class="table table-striped mt-3">
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="card-body">
+                    <p id="clock" class="card-text"></p>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-4 col-sm-6 col-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Total Disposisi Diterima</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Jumlah disposisi yang diterima saat ini adalah
+                        <strong>{{ $countDiterima }}</strong>.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 col-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Total Disposisi Ditolak</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Jumlah disposisi yang ditolak saat ini adalah
+                        <strong>{{ $countDitolak }}</strong>.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 col-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Total Disposisi Pending</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Jumlah disposisi yang pending saat ini adalah
+                        <strong>{{ $countPending }}</strong>.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Grafik Disposisi per Bulan</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="disposisiChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
 @endsection
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var ctx = document.getElementById('disposisiChart').getContext('2d');
+            var disposisiChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: @json($months),
+                    datasets: [{
+                            label: 'Diterima',
+                            data: @json(array_values($diterimaData)),
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderWidth: 2,
+                            fill: true,
+                            cubicInterpolationMode: 'monotone',
+                            tension: 0.4,
+                            pointStyle: 'circle',
+                            pointRadius: 5,
+                            pointBackgroundColor: 'rgba(75, 192, 192, 1)'
+                        },
+                        {
+                            label: 'Ditolak',
+                            data: @json(array_values($ditolakData)),
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderWidth: 2,
+                            fill: true,
+                            cubicInterpolationMode: 'monotone',
+                            tension: 0.4,
+                            pointStyle: 'circle',
+                            pointRadius: 5,
+                            pointBackgroundColor: 'rgba(255, 99, 132, 1)'
+                        },
+                        {
+                            label: 'Pending',
+                            data: @json(array_values($pendingData)),
+                            borderColor: 'rgba(255, 206, 86, 1)',
+                            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                            borderWidth: 2,
+                            fill: true,
+                            cubicInterpolationMode: 'monotone',
+                            tension: 0.4,
+                            pointStyle: 'circle',
+                            pointRadius: 5,
+                            pointBackgroundColor: 'rgba(255, 206, 86, 1)'
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Bulan'
+                            },
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Jumlah Disposisi'
+                            },
+                            grid: {
+                                color: 'rgba(200, 200, 200, 0.2)'
+                            }
+                        }
+                    },
+                    elements: {
+                        line: {
+                            borderWidth: 3
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function updateClock() {
+                const now = new Date();
+
+                const localOffset = now.getTimezoneOffset() * 60000;
+
+                const wibOffset = 7 * 60 * 60 * 1000;
+
+                const wibTime = new Date(now.getTime() + localOffset + wibOffset);
+
+                const hours = String(wibTime.getHours()).padStart(2, '0');
+                const minutes = String(wibTime.getMinutes()).padStart(2, '0');
+                const seconds = String(wibTime.getSeconds()).padStart(2, '0');
+
+                document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+            }
+
+            setInterval(updateClock, 1000);
+
+            updateClock();
+        });
+    </script>
+@endpush

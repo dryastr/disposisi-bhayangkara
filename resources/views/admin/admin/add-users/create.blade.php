@@ -2,6 +2,10 @@
 
 @section('title', 'Tambah Pengguna')
 
+@push('header-styles')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+@endpush
+
 @section('content')
     <div class="col-md-12 col-12">
         <div class="card">
@@ -19,7 +23,7 @@
                                 </div>
                                 <div class="col-md-8 form-group">
                                     <input type="text" id="name" class="form-control" name="name"
-                                        placeholder="Nama Pengguna" required>
+                                        placeholder="Nama Pengguna" maxlength="100" required>
                                 </div>
 
                                 <div class="col-md-4">
@@ -27,7 +31,7 @@
                                 </div>
                                 <div class="col-md-8 form-group">
                                     <input type="email" id="email" class="form-control" name="email"
-                                        placeholder="Email" required>
+                                        placeholder="Email" maxlength="13" required>
                                 </div>
 
                                 <div class="col-md-4">
@@ -35,7 +39,9 @@
                                 </div>
                                 <div class="col-md-8 form-group">
                                     <input type="text" id="no_telp" class="form-control" name="no_telp"
-                                        placeholder="No. Telepon">
+                                        placeholder="No. Telepon" maxlength="13" pattern="\d*"
+                                        title="Hanya angka yang diperbolehkan">
+                                    <span id="no_telp-help" class="form-text text-muted">*Maksimal 13 digit.</span>
                                 </div>
 
                                 <div class="col-md-4">
@@ -54,8 +60,15 @@
                                     <label for="password">Password</label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="password" id="password" class="form-control" name="password"
-                                        placeholder="Password" required>
+                                    <div class="input-group">
+                                        <input type="password" id="password" class="form-control" name="password"
+                                            placeholder="Password" required>
+                                        <span class="input-group-text" id="togglePassword">
+                                            <i class="fa fa-eye"></i>
+                                        </span>
+                                    </div>
+                                    <span id="password-help" class="form-text text-muted">*Password harus minimal 8
+                                        karakter.</span>
                                 </div>
 
                                 <div class="col-sm-12 d-flex justify-content-end mt-5">
@@ -71,3 +84,52 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var passwordInput = document.getElementById('password');
+            var passwordHelp = document.getElementById('password-help');
+
+            passwordInput.addEventListener('input', function() {
+                if (passwordInput.value.length < 8) {
+                    passwordHelp.textContent = 'Password harus minimal 8 karakter.';
+                    passwordHelp.classList.add('text-danger');
+                } else {
+                    passwordHelp.textContent = 'Password valid.';
+                    passwordHelp.classList.remove('text-danger');
+                    passwordHelp.classList.add('text-success');
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var noTelpInput = document.getElementById('no_telp');
+
+            noTelpInput.addEventListener('input', function() {
+                noTelpInput.value = noTelpInput.value.replace(/[^0-9]/g, '');
+
+                if (noTelpInput.value.length > 13) {
+                    noTelpInput.value = noTelpInput.value.slice(0, 13);
+                }
+            });
+        });
+    </script>
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordField = document.getElementById('password');
+            const passwordIcon = this.querySelector('i');
+
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                passwordIcon.classList.remove('fa-eye');
+                passwordIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                passwordIcon.classList.remove('fa-eye-slash');
+                passwordIcon.classList.add('fa-eye');
+            }
+        });
+    </script>
+@endpush

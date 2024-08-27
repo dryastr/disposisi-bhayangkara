@@ -19,14 +19,21 @@ class LembarDisposisiKarumkitController extends Controller
         $user = Auth::user();
 
         if ($user->role->name === 'karumkit') {
-            $disposisi = Disposisi::whereHas('users', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            })->get();
+            $disposisiNullIsUser = Disposisi::whereNull('is_user')
+                ->whereHas('users', function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                })->get();
+
+            $disposisiIsUser = Disposisi::where('is_user', 1)
+                ->whereHas('users', function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                })->get();
         } else {
-            $disposisi = collect([]);
+            $disposisiNullIsUser = collect([]);
+            $disposisiIsUser = collect([]);
         }
 
-        return view('admin.karumkit.lembar-disposisi.index', compact('disposisi'));
+        return view('admin.karumkit.lembar-disposisi.index', compact('disposisiNullIsUser', 'disposisiIsUser'));
     }
 
     public function show($id)
@@ -48,27 +55,36 @@ class LembarDisposisiKarumkitController extends Controller
     {
         $disposisi = Disposisi::findOrFail($id);
 
-        $karumkitId = $request->input('karumkit_id');
-        $karumkit = User::findOrFail($karumkitId);
+        $karumkitIds = $request->input('karumkit_id', []);
+        $karumkits = User::whereIn('id', $karumkitIds)->get();
 
-        DB::table('pivot_disposisi')->insert([
-            'disposisi_id' => $disposisi->id,
-            'user_id' => $karumkit->id,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        DB::transaction(function () use ($disposisi, $karumkits) {
+            foreach ($karumkits as $karumkit) {
+                DB::table('pivot_disposisi')->insert([
+                    'disposisi_id' => $disposisi->id,
+                    'user_id' => $karumkit->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
 
-        $adminSpriUsers = User::whereHas('role', function ($query) {
-            $query->whereIn('name', ['admin', 'spri']);
-        })->get();
+            $disposisi->is_user = 1;
+            $disposisi->save();
 
-        foreach ($adminSpriUsers as $adminSpriUser) {
-            Mail::to($adminSpriUser->email)->send(new DisposisiSent($disposisi, $karumkit));
-        }
+            $adminSpriUsers = User::whereHas('role', function ($query) {
+                $query->whereIn('name', ['admin', 'spri']);
+            })->get();
 
-        if ($karumkit->email) {
-            Mail::to($karumkit->email)->send(new DisposisiReceivedUser($disposisi, $karumkit));
-        }
+            foreach ($adminSpriUsers as $adminSpriUser) {
+                Mail::to($adminSpriUser->email)->send(new DisposisiSent($disposisi, $karumkits));
+            }
+
+            foreach ($karumkits as $karumkit) {
+                if ($karumkit->email) {
+                    Mail::to($karumkit->email)->send(new DisposisiReceivedUser($disposisi, $karumkit));
+                }
+            }
+        });
 
         return redirect()->route('lembar-disposisi-karumkit.index')->with('success', 'Disposisi telah dikirim dan email telah dikirim ke admin, spri, dan penerima disposisi yang dipilih.');
     }
