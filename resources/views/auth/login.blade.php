@@ -37,14 +37,15 @@
                 <div class="card">
                     <div class="card-body">
                         <!-- Logo -->
-                        {{-- <div class="app-brand justify-content-center">
+                        <h4 class="mb-4 text-center">Monitoring Surat Masuk Rumah Sakit Bhayangkara Makassar</h4>
+                        <div class="app-brand justify-content-center">
                             <a href="index.html" class="app-brand-link gap-2">
                                 <span class="app-brand-logo demo">
-                                    <img src="{{ asset('assets-auth/img/logo-map.png') }}" alt="Logo Map"
-                                        width="100">
+                                    <img src="{{ asset('assets-auth/img/logo-rs-bhayangkara.png') }}" alt="Logo Map"
+                                        width="120">
                                 </span>
                             </a>
-                        </div> --}}
+                        </div>
                         <h4 class="mb-2">Selamat Datang! 👋</h4>
                         <p class="mb-4">Silahkan login untuk masuk ke akunmu</p>
 
